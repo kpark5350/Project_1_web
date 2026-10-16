@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Recipe Studio is a simple student recipe website with easy meals, step-by-step cooking instructions, and food stories.">
+  <title>Recipe Studio | Home</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <style>
+    :root {
+      --cream: #fffaf3;
+      --white: #ffffff;
+      --green: #345a43;
+      --dark: #27352b;
+      --orange: #d87948;
+      --light-orange: #fff0df;
+      --muted: #69756d;
+      --border: #e9e4d9;
+      --shadow: 0 8px 20px rgba(41, 50, 36, 0.07);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body { margin: 0; background: var(--cream); color: var(--dark); font-family: Arial, Helvetica, sans-serif; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { font-size: clamp(2.3rem, 5vw, 4.2rem); }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    h3 { font-size: 1.2rem; }
+    ul, ol { padding-left: 1.4rem; }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .page[hidden] { display: none !important; }
+    .skip-link { position: absolute; left: 12px; top: -70px; background: var(--white); padding: 10px 15px; z-index: 30; border-radius: 8px; }
+    .skip-link:focus { top: 10px; }
+
+    .site-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+    .header-inner { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-size: 1.45rem; color: var(--green); font-weight: 800; white-space: nowrap; letter-spacing: -0.7px; }
+    .logo span { color: var(--orange); }
+    .main-nav { display: flex; align-items: center; gap: 29px; }
+    .nav-link { color: #3f4c42; font-weight: 600; padding: 9px 0; position: relative; transition: color 0.2s ease; }
+    .nav-link::after { content: ""; position: absolute; left: 0; bottom: 4px; width: 0; height: 2px; background: var(--orange); transition: width 0.25s ease; }
+    .nav-link:hover, .nav-link[aria-current="page"] { color: var(--orange); }
+    .nav-link:hover::after, .nav-link[aria-current="page"]::after { width: 100%; }
+    .header-label { padding: 8px 12px; border-radius: 20px; background: #f4f6ef; color: var(--green); font-size: 0.76rem; font-weight: 700; white-space: nowrap; }
+
+    .hero { padding: 65px 0 68px; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; align-items: center; }
+    .eyebrow { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 2px; color: var(--orange); font-weight: 800; margin-bottom: 15px; }
+    .hero-copy { animation: fadeUp 0.8s ease both; }
+    .hero h1 { margin-bottom: 22px; letter-spacing: -1.8px; }
+    .hero h1 span { color: var(--orange); }
+    .hero-description { max-width: 480px; color: var(--muted); font-size: 1.07rem; margin-bottom: 28px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; background: var(--green); color: var(--white); border: 2px solid var(--green); border-radius: 9px; padding: 12px 22px; font-weight: 700; transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease; }
+    .button:hover { background: var(--orange); border-color: var(--orange); transform: scale(1.04); }
+    .button-outline { background: transparent; color: var(--green); }
+    .button-outline:hover { color: var(--white); }
+    .hero-photo { height: 390px; position: relative; border-radius: 25px; background: #e8efdd; box-shadow: 12px 12px 0 #f9dfc5; animation: imageAppear 1s ease both; }
+    .photo-fallback { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 7rem; border-radius: inherit; background: linear-gradient(140deg, #e4eed9, #f9d6b5); }
+    .hero-photo img, .recipe-image img, .detail-photo img { width: 100%; height: 100%; object-fit: cover; position: relative; border-radius: inherit; }
+    .hero-photo img { object-position: center; }
+    .photo-note { position: absolute; bottom: 18px; left: -22px; background: var(--white); border-radius: 12px; padding: 12px 18px; box-shadow: var(--shadow); font-weight: 800; color: var(--green); animation: gentleFloat 4s ease-in-out infinite; }
+    .photo-note small { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 500; }
+
+    .section-space { padding: 56px 0 75px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin-bottom: 26px; }
+    .section-heading h2 { margin: 0 0 6px; }
+    .section-heading p { margin: 0; color: var(--muted); }
+    .small-link { color: var(--green); font-weight: 800; text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 5px; }
+    .recipe-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .recipe-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.28s ease, box-shadow 0.28s ease; }
+    .recipe-card:hover { transform: translateY(-6px); box-shadow: 0 15px 28px rgba(41, 50, 36, 0.13); }
+    .recipe-image { position: relative; display: block; height: 205px; background: #ebeedb; overflow: hidden; }
+    .recipe-image .photo-fallback { border-radius: 0; font-size: 4.6rem; }
+    .recipe-image img { transition: transform 0.35s ease; }
+    .recipe-card:hover .recipe-image img { transform: scale(1.05); }
+    .image-tag { position: absolute; top: 13px; left: 13px; background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 4px 11px; color: var(--green); font-size: 0.75rem; font-weight: 800; }
+    .recipe-content { padding: 19px 20px 21px; }
+    .recipe-meta { color: var(--orange); font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; }
+    .recipe-content h3 { margin-bottom: 10px; }
+    .recipe-content p { color: var(--muted); font-size: 0.92rem; min-height: 45px; margin-bottom: 16px; }
+    .recipe-link { color: var(--green); display: inline-block; font-weight: 800; font-size: 0.9rem; transition: color 0.2s ease, transform 0.2s ease; }
+    .recipe-link:hover { color: var(--orange); transform: translateX(3px); }
+
+    .story-preview { background: #f1f4e9; padding: 47px 0; }
+    .story-preview-inner { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .story-preview h2 { margin-bottom: 10px; }
+    .story-preview p { color: var(--muted); max-width: 620px; margin-bottom: 0; }
+    .steps-preview { padding: 60px 0 85px; }
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .how-card { border: 1px solid var(--border); background: var(--white); border-radius: 14px; padding: 23px; }
+    .how-number { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--light-orange); color: var(--orange); font-weight: 800; margin-bottom: 13px; }
+    .how-card h3 { margin-bottom: 9px; }
+    .how-card p { margin: 0; color: var(--muted); font-size: 0.94rem; }
+
+    .page-banner { padding: 54px 0 35px; text-align: center; }
+    .page-banner h1 { font-size: clamp(2.1rem, 4vw, 3rem); margin-bottom: 12px; letter-spacing: -1px; }
+    .page-banner p { color: var(--muted); max-width: 620px; margin: 0 auto; }
+    .recipe-list-section { padding-top: 10px; }
+    .recipe-count { color: var(--muted); font-weight: 700; font-size: 0.9rem; margin: 0 0 19px; }
+
+    .detail-shell { padding: 42px 0 85px; }
+    .back-link { color: var(--green); display: inline-block; font-weight: 700; margin-bottom: 26px; }
+    .back-link:hover { color: var(--orange); }
+    .detail-intro { margin-bottom: 27px; }
+    .detail-intro h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 10px; }
+    .detail-intro p:last-child { color: var(--muted); max-width: 680px; margin-bottom: 0; }
+    .detail-grid { display: grid; grid-template-columns: 0.94fr 1.06fr; gap: 37px; align-items: start; }
+    .detail-photo { height: 320px; position: relative; border-radius: 16px; overflow: hidden; background: #e8efdd; margin-bottom: 28px; }
+    .detail-photo .photo-fallback { font-size: 6rem; }
+    .detail-grid h2 { font-size: 1.55rem; margin-bottom: 16px; }
+    .detail-box, .story-box, .time-box { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 23px; }
+    .ingredients-list { margin: 0; padding-left: 21px; }
+    .ingredients-list li { padding: 5px 0; }
+    .time-box { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; padding: 17px 9px; margin-bottom: 26px; }
+    .time-box div + div { border-left: 1px solid var(--border); }
+    .time-box strong { display: block; font-size: 1rem; color: var(--green); }
+    .time-box span { font-size: 0.78rem; color: var(--muted); }
+    .cooking-steps { list-style: none; padding: 0; counter-reset: cooking; margin: 0; }
+    .cooking-steps li { counter-increment: cooking; display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .cooking-steps li:last-child { border-bottom: 0; padding-bottom: 0; }
+    .cooking-steps li::before { content: counter(cooking); display: grid; place-items: center; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; background: var(--light-orange); color: var(--orange); font-weight: 800; }
+    .story-box { margin-top: 24px; background: #f1f4e9; border-color: #e2e8d9; }
+    .story-box p { margin-bottom: 0; color: #4e5b4f; }
+    .story-label { color: var(--orange); font-size: 0.79rem; font-weight: 800; letter-spacing: 1px; }
+
+    .about-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 26px; padding: 20px 0 80px; }
+    .info-panel { background: var(--white); border: 1px solid var(--border); padding: 29px; border-radius: var(--radius); }
+    .info-panel h2 { font-size: 1.6rem; }
+    .info-panel p { color: #546158; }
+    .info-panel p:last-child { margin-bottom: 0; }
+    .info-panel ul { color: #546158; }
+    .about-aside { background: #f1f4e9; }
+    .about-aside .big-emoji { font-size: 3rem; display: block; margin-bottom: 14px; }
+    .team-link-panel { margin-top: 26px; padding: 23px 27px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--white); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .team-link-panel h3 { margin-bottom: 5px; }
+    .team-link-panel p { margin: 0; color: var(--muted); }
+    .team-wrapper { max-width: 770px; margin: 0 auto; padding: 12px 0 83px; }
+    .team-card { border: 1px solid var(--border); border-radius: 16px; background: var(--white); padding: 33px; }
+    .avatar { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--light-orange); color: var(--orange); font-size: 1.6rem; font-weight: 800; margin-bottom: 18px; }
+    .team-card h2 { margin-bottom: 7px; }
+    .team-card .role { color: var(--orange); font-weight: 700; }
+    .team-card li { padding: 3px 0; }
+
+    .site-footer { background: var(--green); color: #f7fff8; padding: 30px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer-inner strong { font-size: 1.12rem; }
+    .footer-inner p { margin: 5px 0 0; font-size: 0.85rem; color: #d7e3d9; }
+    .footer-links { display: flex; gap: 20px; font-size: 0.89rem; flex-wrap: wrap; }
+    .footer-links a { text-decoration: underline; text-underline-offset: 4px; }
+    .footer-links a:hover { color: #ffd7a7; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes imageAppear { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+    @media (max-width: 900px) {
+      .header-label { display: none; }
+      .hero-grid { gap: 30px; }
+      .hero-photo { height: 320px; }
+      .recipe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .detail-grid { gap: 22px; }
+    }
+
+    @media (max-width: 620px) {
+      .header-inner { flex-direction: column; justify-content: center; gap: 0; padding: 13px 0 10px; }
+      .logo { font-size: 1.3rem; }
+      .main-nav { gap: 24px; }
+      .nav-link { font-size: 0.91rem; }
+      .hero { padding: 36px 0 42px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+      .hero h1 { letter-spacing: -1px; }
+      .hero-photo { height: 265px; margin-right: 10px; }
+      .photo-note { left: -6px; bottom: 12px; }
+      .section-space { padding: 37px 0 55px; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .recipe-grid, .how-grid, .detail-grid, .about-layout { grid-template-columns: 1fr; }
+      .recipe-image { height: 215px; }
+      .recipe-content p { min-height: 0; }
+      .story-preview-inner, .team-link-panel { align-items: start; flex-direction: column; }
+      .story-preview { padding: 36px 0; }
+      .steps-preview { padding: 45px 0 65px; }
+      .page-banner { padding: 40px 0 27px; }
+      .detail-shell { padding: 25px 0 58px; }
+      .detail-photo { height: 250px; }
+      .about-layout { padding-bottom: 55px; }
+      .info-panel, .team-card { padding: 23px; }
+      .footer-inner { flex-direction: column; align-items: start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="logo" aria-label="Recipe Studio Home">🍽 Recipe <span>Studio</span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#home" class="nav-link" data-nav="home" aria-current="page">Home</a>
+        <a href="#recipes" class="nav-link" data-nav="recipes">Recipes</a>
+        <a href="#about" class="nav-link" data-nav="about">About</a>
+      </nav>
+      <span class="header-label">CSC 4370 Project 1</span>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section id="page-home" class="page" aria-labelledby="home-title">
+      <div class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Welcome to Recipe Studio</p>
+            <h1 id="home-title">Simple recipes for <span>everyday cooking.</span></h1>
+            <p class="hero-description">Welcome to my little recipe website! Here you can find easy meals, simple steps, and short stories behind some of my favorite foods.</p>
+            <a class="button" href="#recipes">View Recipes <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-photo">
+            <div class="photo-fallback" aria-hidden="true">🥗</div>
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&amp;auto=format&amp;fit=crop&amp;q=80" alt="Colorful bowl of food with fresh ingredients" onerror="this.style.display='none'">
+            <div class="photo-note">Fresh and simple <small>Made for home cooks</small></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section-space" aria-labelledby="featured-heading">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">What should we cook?</p>
+              <h2 id="featured-heading">Featured Recipes</h2>
+              <p>Start with these easy and tasty dishes.</p>
+            </div>
+            <a class="small-link" href="#recipes">See all recipes →</a>
+          </div>
+          <div id="featured-grid" class="recipe-grid"></div>
+        </div>
+      </section>
+
+      <section class="story-preview" aria-labelledby="story-preview-heading">
+        <div class="container story-preview-inner">
+          <div>
+            <p class="eyebrow">Story Pack</p>
+            <h2 id="story-preview-heading">Every recipe has a story.</h2>
+            <p>Food is not only about cooking. It can remind us of family, culture, or a good memory. Open a recipe to read a little background story with it.</p>
+          </div>
+          <a class="button button-outline" href="#recipe-bibimbap">Read a Recipe Story →</a>
+        </div>
+      </section>
+
+      <section class="steps-preview" aria-labelledby="how-heading">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Easy to use</p>
+              <h2 id="how-heading">How Recipe Studio Works</h2>
+            </div>
+          </div>
+          <div class="how-grid">
+            <article class="how-card"><span class="how-number">1</span><h3>Choose a recipe</h3><p>Look through the recipe cards and pick something you want to make.</p></article>
+            <article class="how-card"><span class="how-number">2</span><h3>Follow the steps</h3><p>Check the ingredients, cooking time, and step-by-step directions.</p></article>
+            <article class="how-card"><span class="how-number">3</span><h3>Enjoy the food</h3><p>Try it at home and read the short story behind your dish.</p></article>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section id="page-recipes" class="page" aria-labelledby="recipes-title" hidden>
+      <div class="page-banner container">
+        <p class="eyebrow">Let's make something good</p>
+        <h1 id="recipes-title">Our Recipes</h1>
+        <p>Here are six recipes I chose for this website. They use familiar ingredients and have simple directions that beginners can follow.</p>
+      </div>
+      <div class="container section-space recipe-list-section">
+        <p class="recipe-count">Showing 6 recipes</p>
+        <div id="all-recipes-grid" class="recipe-grid"></div>
+      </div>
+    </section>
+
+    <section id="page-detail" class="page" aria-label="Recipe details" hidden></section>
+
+    <section id="page-about" class="page" aria-labelledby="about-title" hidden>
+      <div class="page-banner container">
+        <p class="eyebrow">A little about the project</p>
+        <h1 id="about-title">About Recipe Studio</h1>
+        <p>A simple student website made to share recipes and practice HTML and CSS.</p>
+      </div>
+      <div class="container">
+        <div class="about-layout">
+          <article class="info-panel">
+            <h2>Why I Made This Website</h2>
+            <p>Hi! I created Recipe Studio for my CSC 4370 Web Programming Project 1. I wanted a website that feels easy to use and helps people find food ideas without too much information on one screen.</p>
+            <p>I chose recipes that are simple enough for students or beginner cooks. I also included Korean recipes because I wanted to share food that is familiar to me.</p>
+            <h2>What You Can Find Here</h2>
+            <ul>
+              <li>Six recipes with pictures and short descriptions</li>
+              <li>Ingredients, cooking time, and cooking steps</li>
+              <li>A small background story for each recipe</li>
+              <li>A layout that works on desktop, tablet, and mobile</li>
+            </ul>
+            <p>This project uses HTML, CSS Grid, Flexbox, media queries, transitions, transforms, and CSS animations. The small JavaScript part helps the sections and recipe details work inside one HTML file.</p>
+          </article>
+          <aside class="info-panel about-aside">
+            <span class="big-emoji" aria-hidden="true">📖</span>
+            <h2>My Story Pack</h2>
+            <p>For my extension pack, I picked Story Pack. Each recipe includes a short story about the food, where it comes from, or why I picked it.</p>
+            <p>I think this makes the recipes more interesting than showing just ingredients and instructions.</p>
+            <h3>Image Credits</h3>
+            <p>Food pictures are used for illustration and are loaded from <a class="small-link" href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>. Pictures may be different from the finished recipe.</p>
+          </aside>
+        </div>
+        <div class="team-link-panel">
+          <div><h3>Who Made This Project?</h3><p>This is an undergraduate solo project. You can read my team introduction here.</p></div>
+          <a class="button button-outline" href="#team">Team Introduction →</a>
+        </div>
+        <div style="height:70px"></div>
+      </div>
+    </section>
+
+    <section id="page-team" class="page" aria-labelledby="team-title" hidden>
+      <div class="page-banner container">
+        <p class="eyebrow">Project team</p>
+        <h1 id="team-title">Team Introduction</h1>
+        <p>Meet the student behind Recipe Studio.</p>
+      </div>
+      <div class="container team-wrapper">
+        <article class="team-card">
+          <div class="avatar" aria-hidden="true">KP</div>
+          <h2>Ki Hyun Park</h2>
+          <p class="role">Team Leader &amp; Developer</p>
+          <p><strong>Course:</strong> CSC 4370 Web Programming</p>
+          <p><strong>Group:</strong> UG-S03 · Undergraduate Solo</p>
+          <p><strong>Project:</strong> Recipe Studio · Story Pack</p>
+          <h3>My Responsibilities</h3>
+          <ul>
+            <li>Planning the project and drawing the wireframes</li>
+            <li>Writing the HTML structure and CSS design</li>
+            <li>Making the layout responsive for different screens</li>
+            <li>Adding CSS transitions, transforms, and animations</li>
+            <li>Testing navigation, accessibility, and final pages</li>
+            <li>Preparing the project documentation and presentation</li>
+          </ul>
+          <p>Because this is a solo project, I am responsible for all parts of the work.</p>
+          <a href="#home" class="button">Back to Home →</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>🍽 Recipe Studio</strong><p>Made by Ki Hyun Park · CSC 4370 · 2026</p></div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#home">Home</a><a href="#recipes">Recipes</a><a href="#about">About</a><a href="#team">Team Introduction</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    const recipes = [
+      {
+        id: "bibimbap",
+        name: "Bibimbap",
+        type: "Korean Food",
+        time: "30 min",
+        difficulty: "Easy",
+        servings: "2 people",
+        emoji: "🍚",
+        image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=80",
+        description: "A colorful rice bowl with vegetables, egg, and tasty sauce.",
+        ingredients: ["2 bowls of cooked rice", "1 small carrot, sliced", "1 cup of spinach", "1/2 cucumber, sliced", "2 eggs", "2 tablespoons gochujang", "1 teaspoon sesame oil"],
+        steps: ["Cook the rice and prepare all the vegetables.", "Lightly cook the carrot and spinach in a pan.", "Fry the eggs the way you like them.", "Put rice into two bowls and arrange the vegetables on top.", "Add an egg, gochujang, and sesame oil. Mix everything before eating."],
+        story: "Bibimbap is a popular Korean rice dish. Its name means mixed rice, and it is known for bringing different vegetables and flavors together in one bowl. I picked this recipe because it is colorful, filling, and reminds me of Korean home cooking."
+      },
+      {
+        id: "kimchi-rice",
+        name: "Kimchi Fried Rice",
+        type: "Korean Food",
+        time: "20 min",
+        difficulty: "Easy",
+        servings: "2 people",
+        emoji: "🍳",
+        image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=700&auto=format&fit=crop&q=80",
+        description: "A quick rice dish with kimchi, vegetables, and a fried egg.",
+        ingredients: ["2 cups cooked rice", "1 cup chopped kimchi", "1/4 onion, chopped", "1 tablespoon cooking oil", "1 teaspoon soy sauce", "2 eggs", "1 teaspoon sesame oil"],
+        steps: ["Heat cooking oil in a pan over medium heat.", "Cook the onion and kimchi for about three minutes.", "Add the cooked rice and break up any clumps.", "Stir in soy sauce and sesame oil, then cook for a few more minutes.", "Top with fried eggs and serve warm."],
+        story: "Kimchi fried rice is a familiar comfort food in many Korean homes. It is a useful way to turn leftover rice and kimchi into another meal. I chose it because it is inexpensive, fast, and great for busy students."
+      },
+      {
+        id: "spaghetti",
+        name: "Tomato Spaghetti",
+        type: "Italian Food",
+        time: "25 min",
+        difficulty: "Easy",
+        servings: "2 people",
+        emoji: "🍝",
+        image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=700&auto=format&fit=crop&q=80",
+        description: "Simple spaghetti with tomato sauce and garlic.",
+        ingredients: ["200 g spaghetti", "1 cup tomato sauce", "2 cloves garlic, minced", "1 tablespoon olive oil", "1/4 teaspoon salt", "A pinch of black pepper", "Fresh basil or parmesan, optional"],
+        steps: ["Boil a pot of water and cook spaghetti according to the package.", "Heat olive oil in a pan and cook the minced garlic briefly.", "Add tomato sauce, salt, and black pepper.", "Drain the pasta and mix it with the sauce.", "Serve with basil or parmesan if you like."],
+        story: "Pasta is eaten in many different ways around the world, but tomato spaghetti is one of the easiest versions to try at home. I included it because it needs only a few ingredients and makes a simple dinner."
+      },
+      {
+        id: "pancakes",
+        name: "Fluffy Pancakes",
+        type: "Breakfast",
+        time: "20 min",
+        difficulty: "Easy",
+        servings: "2 people",
+        emoji: "🥞",
+        image: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=700&auto=format&fit=crop&q=80",
+        description: "Soft breakfast pancakes you can eat with fruit or syrup.",
+        ingredients: ["1 cup all-purpose flour", "1 tablespoon sugar", "1 teaspoon baking powder", "1 egg", "3/4 cup milk", "1 tablespoon melted butter", "Maple syrup or fruit for serving"],
+        steps: ["Mix flour, sugar, and baking powder in a bowl.", "In another bowl, mix egg, milk, and melted butter.", "Pour the wet ingredients into the dry ingredients and stir gently.", "Pour small circles of batter onto a lightly greased pan.", "Flip when bubbles appear, cook the other side, and serve."],
+        story: "Pancakes are a classic breakfast food in many places. They are often enjoyed on slow mornings or weekends. I picked them because they are fun to make and easy to change with different toppings."
+      },
+      {
+        id: "avocado-toast",
+        name: "Avocado Toast",
+        type: "Breakfast",
+        time: "10 min",
+        difficulty: "Easy",
+        servings: "1 person",
+        emoji: "🥑",
+        image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80",
+        description: "Crunchy toast topped with creamy avocado and egg.",
+        ingredients: ["2 slices of bread", "1 ripe avocado", "1 egg", "1 teaspoon lemon juice", "A pinch of salt", "A pinch of black pepper", "Chili flakes, optional"],
+        steps: ["Toast the bread until golden and crispy.", "Mash the avocado with lemon juice, salt, and pepper.", "Cook the egg in a small pan.", "Spread mashed avocado onto the toast.", "Add the egg and a few chili flakes if you want."],
+        story: "Avocado toast is a popular easy breakfast and brunch meal. I chose this recipe because it takes only a few minutes and can be made before class on a busy morning."
+      },
+      {
+        id: "stir-fry",
+        name: "Vegetable Stir-Fry",
+        type: "Quick Meal",
+        time: "20 min",
+        difficulty: "Easy",
+        servings: "2 people",
+        emoji: "🥦",
+        image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop&q=80",
+        description: "Mixed vegetables cooked in a light soy sauce.",
+        ingredients: ["1 cup broccoli", "1 carrot, sliced", "1 bell pepper, sliced", "1/2 onion, sliced", "1 tablespoon cooking oil", "1 tablespoon soy sauce", "1 teaspoon sesame oil"],
+        steps: ["Wash and cut the vegetables into small pieces.", "Heat cooking oil in a large pan over medium-high heat.", "Add broccoli and carrot and cook for three minutes.", "Add bell pepper and onion, then stir-fry until just tender.", "Mix in soy sauce and sesame oil, then serve with rice."],
+        story: "Stir-frying is a quick cooking method used in many Asian cuisines. I included this dish because you can use vegetables you already have at home. It is useful when you want a simple meal without a long cooking time."
+      }
+    ];
+
+    function makeCard(recipe) {
+      return `
+        <article class="recipe-card">
+          <a class="recipe-image" href="#recipe-${recipe.id}" aria-label="View ${recipe.name} recipe">
+            <span class="photo-fallback" aria-hidden="true">${recipe.emoji}</span>
+            <img src="${recipe.image}" alt="Illustrative food photo for ${recipe.name}" loading="lazy" onerror="this.style.display='none'">
+            <span class="image-tag">${recipe.type}</span>
+          </a>
+          <div class="recipe-content">
+            <div class="recipe-meta">⏱ ${recipe.time} · ${recipe.difficulty}</div>
+            <h3>${recipe.name}</h3>
+            <p>${recipe.description}</p>
+            <a class="recipe-link" href="#recipe-${recipe.id}">View Recipe <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderDetail(recipe) {
+      document.getElementById("page-detail").innerHTML = `
+        <div class="container detail-shell">
+          <a class="back-link" href="#recipes">← Back to Recipes</a>
+          <div class="detail-intro">
+            <p class="eyebrow">Recipe Detail · ${recipe.type}</p>
+            <h1>${recipe.name}</h1>
+            <p>${recipe.description}</p>
+          </div>
+          <div class="detail-grid">
+            <div>
+              <div class="detail-photo">
+                <div class="photo-fallback" aria-hidden="true">${recipe.emoji}</div>
+                <img src="${recipe.image}" alt="Illustrative food photo for ${recipe.name}" onerror="this.style.display='none'">
+              </div>
+              <section class="detail-box" aria-labelledby="ingredients-title">
+                <h2 id="ingredients-title">Ingredients</h2>
+                <ul class="ingredients-list">${recipe.ingredients.map(item => `<li>${item}</li>`).join("")}</ul>
+              </section>
+            </div>
+            <div>
+              <div class="time-box" aria-label="Recipe information">
+                <div><strong>${recipe.time}</strong><span>Cooking Time</span></div>
+                <div><strong>${recipe.difficulty}</strong><span>Difficulty</span></div>
+                <div><strong>${recipe.servings}</strong><span>Servings</span></div>
+              </div>
+              <section class="detail-box" aria-labelledby="steps-title">
+                <h2 id="steps-title">Cooking Steps</h2>
+                <ol class="cooking-steps">${recipe.steps.map(step => `<li>${step}</li>`).join("")}</ol>
+              </section>
+              <section class="story-box" aria-labelledby="story-title">
+                <p class="story-label">STORY PACK</p>
+                <h2 id="story-title">Recipe Story</h2>
+                <p>${recipe.story}</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const featuredGrid = document.getElementById("featured-grid");
+    const allRecipesGrid = document.getElementById("all-recipes-grid");
+    featuredGrid.innerHTML = recipes.slice(0, 3).map(makeCard).join("");
+    allRecipesGrid.innerHTML = recipes.map(makeCard).join("");
+
+    function showPage() {
+      const hash = decodeURIComponent(window.location.hash.slice(1)) || "home";
+      if (hash === "main-content") {
+        document.getElementById("main-content").focus({ preventScroll: true });
+        return;
+      }
+      const selectedRecipe = hash.startsWith("recipe-") ? recipes.find(recipe => recipe.id === hash.slice(7)) : null;
+      const validPages = ["home", "recipes", "about", "team"];
+      const currentPage = selectedRecipe ? "detail" : validPages.includes(hash) ? hash : "home";
+
+      if (selectedRecipe) renderDetail(selectedRecipe);
+
+      document.querySelectorAll(".page").forEach(page => {
+        page.hidden = page.id !== `page-${currentPage}`;
+      });
+
+      document.querySelectorAll("[data-nav]").forEach(link => {
+        const activePage = currentPage === "detail" ? "recipes" : currentPage;
+        if (link.dataset.nav === activePage) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+
+      const pageTitle = selectedRecipe ? selectedRecipe.name : currentPage === "detail" ? "Home" : currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
+      document.title = `Recipe Studio | ${pageTitle}`;
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener("hashchange", showPage);
+    showPage();
+  </script>
+</body>
+</html>
